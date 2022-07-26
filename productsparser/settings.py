@@ -103,3 +103,10 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Настройки для MongoDB:
+# MONGO_URI = '192.168.2.230:27017'  # --------------
+MONGO_HOST = '192.168.2.230'
+MONGO_PORT = 27017
+MONGO_DATABASE = 'castorama_db'
+MONGO_COLL_QUOTES = 'laminate'
