@@ -6,8 +6,20 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from scrapy.pipelines.images import ImagesPipeline
 
 
 class ProductsparserPipeline:
     def process_item(self, item, spider):
+        print('spider.name: ', spider.name)
+        print('item: ', item)
         return item
+
+
+class ProductsImagesPipeline(ImagesPipeline):
+    """
+    Пайплайн для картинок
+    """
+    def get_media_requests(self, item, info):
+        print()
+        pass

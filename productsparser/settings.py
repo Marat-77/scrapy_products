@@ -19,6 +19,8 @@ LOG_ENABLED = True
 # 'INFO' / 'DEBUG'
 LOG_LEVEL = 'DEBUG'
 
+# указываем директорию для сохранения картинок:
+IMAGES_STORE = 'prod_images'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0'
@@ -69,7 +71,10 @@ COOKIES_ENABLED = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+# 1.ProductsImagesPipeline
+# 2.ProductsparserPipeline
 ITEM_PIPELINES = {
+   'productsparser.pipelines.ProductsImagesPipeline': 200,
    'productsparser.pipelines.ProductsparserPipeline': 300,
 }
 
