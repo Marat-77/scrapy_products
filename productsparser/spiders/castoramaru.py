@@ -132,16 +132,20 @@ class CastoramaruSpider(scrapy.Spider):
         # если картинка одна, то маленькой картинки нет - только большая
         # //ul[@class="swiper-wrapper"]/li[contains(@class,"thumb-slide")]/img[contains(@class,"thumb-slide__img")] -----
         # //img[contains(@class,"thumb-slide__img")]/@src
-        # list_images = response.xpath('//img[contains(@class,"thumb-slide__img")]').getall()
-        # list_images = response.xpath('//img[contains(@class,"thumb-slide__img")]/@src').getall()
-        # //img[contains(@class,"thumb-slide__img")]/@src | //img[contains(@class,"thumb-slide__img")]/@data-src | //img[contains(@class,"thumb-slide__img")]/@data-srcset | //img[contains(@class,"thumb-slide__img")]/@srcset
-        # list_images = response.xpath('//img[contains(@class,"thumb-slide__img")]/@src | //img[contains(@class,"thumb-slide__img")]/@data-src | //img[contains(@class,"thumb-slide__img")]/@data-srcset | //img[contains(@class,"thumb-slide__img")]/@srcset').getall()
-        # print(list_images)
-        list_images = response.xpath(
-            '//img[contains(@class,"thumb-slide__img")]/@data-src | //img[contains(@class,"thumb-slide__img")]/@data-srcset | //img[contains(@class,"thumb-slide__img")]/@srcset').getall()
-        # print(list_images)
-        list_images = [image.rstrip(' 2x') for image in list_images]
-        # print(list_images)
+
+        # # ------------------------------------------------------------------------------------------------- убрать маленькие фотки "list_images"
+        # # list_images = response.xpath('//img[contains(@class,"thumb-slide__img")]').getall()
+        # # list_images = response.xpath('//img[contains(@class,"thumb-slide__img")]/@src').getall()
+        # # //img[contains(@class,"thumb-slide__img")]/@src | //img[contains(@class,"thumb-slide__img")]/@data-src | //img[contains(@class,"thumb-slide__img")]/@data-srcset | //img[contains(@class,"thumb-slide__img")]/@srcset
+        # # list_images = response.xpath('//img[contains(@class,"thumb-slide__img")]/@src | //img[contains(@class,"thumb-slide__img")]/@data-src | //img[contains(@class,"thumb-slide__img")]/@data-srcset | //img[contains(@class,"thumb-slide__img")]/@srcset').getall()
+        # # print(list_images)
+        # list_images = response.xpath(
+        #     '//img[contains(@class,"thumb-slide__img")]/@data-src | //img[contains(@class,"thumb-slide__img")]/@data-srcset | //img[contains(@class,"thumb-slide__img")]/@srcset').getall()
+        # # print(list_images)
+        # list_images = [image.rstrip(' 2x') for image in list_images]
+        # # print(list_images)
+        # # ------------------------------------------------------------------------------------------------- убрать маленькие фотки "list_images"
+
         # big images
         # //img[contains(@class,"top-slide__img")]/@src
         # list_big_images = response.xpath('//img[contains(@class,"top-slide__img")]/@src').getall()
@@ -160,5 +164,5 @@ class CastoramaruSpider(scrapy.Spider):
                                  price_currency=regular_price_currency,
                                  measure=measure,
                                  spec_dict=spec_dict,
-                                 list_images=list_images,
+                                 # list_images=list_images,  # --- убрать маленькие фотки "list_images"
                                  list_big_images=list_big_images)

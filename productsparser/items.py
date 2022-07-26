@@ -24,5 +24,5 @@ class ProductsparserItem(scrapy.Item):
 
     spec_dict = scrapy.Field()
 
-    list_images = scrapy.Field()
+    # list_images = scrapy.Field()  # --- убрать маленькие фотки "list_images"
     list_big_images = scrapy.Field()

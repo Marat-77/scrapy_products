@@ -5,6 +5,7 @@
 
 
 # useful for handling different item types with a single interface
+import scrapy
 from itemadapter import ItemAdapter
 from scrapy.pipelines.images import ImagesPipeline
 
@@ -22,4 +23,10 @@ class ProductsImagesPipeline(ImagesPipeline):
     """
     def get_media_requests(self, item, info):
         print()
-        pass
+        if item['list_big_images']:
+            for image in item['list_big_images']:
+                try:
+                    yield scrapy.Request(image)
+                except Exception as e:
+                    print(e)
+    # добавить def item_completed !!!
