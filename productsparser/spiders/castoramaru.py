@@ -1,8 +1,6 @@
 import scrapy
 from scrapy.http import HtmlResponse
 from productsparser.items import ProductsparserItem
-# from jobparser.items import JobparserItem
-from productsparser.items import ProductsparserItem
 from scrapy.loader import ItemLoader
 
 
@@ -66,8 +64,8 @@ class CastoramaruSpider(scrapy.Spider):
         # print(link_count)
         # print()
 
-    @staticmethod
-    def product_parse(response: HtmlResponse):
+    # @staticmethod
+    def product_parse(self, response: HtmlResponse):
         # добавляем loader:
         loader = ItemLoader(item=ProductsparserItem(),
                             response=response)
