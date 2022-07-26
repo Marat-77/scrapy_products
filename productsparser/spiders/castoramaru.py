@@ -3,6 +3,7 @@ from scrapy.http import HtmlResponse
 from productsparser.items import ProductsparserItem
 # from jobparser.items import JobparserItem
 from productsparser.items import ProductsparserItem
+from scrapy.loader import ItemLoader
 
 
 class CastoramaruSpider(scrapy.Spider):
@@ -67,67 +68,110 @@ class CastoramaruSpider(scrapy.Spider):
 
     @staticmethod
     def product_parse(response: HtmlResponse):
+        # добавляем loader:
+        loader = ItemLoader(item=ProductsparserItem(),
+                            response=response)
         # id
         # Код товара: 1001420424
         # //span[@itemprop="sku"]/text()
-        _id = response.xpath('//span[@itemprop="sku"]/text()').get()
+        # _id = response.xpath('//span[@itemprop="sku"]/text()').get()
         # print(_id)
+        # ################################################################
+        # переписываем в loader:
+        # loader.add_xpath('field_name', 'my_xpath')
+        loader.add_xpath('_id', '//span[@itemprop="sku"]/text()')
         #
-        product_url = response.url
+
+        # product_url = response.url
         # print(product_url)
+        # ################################################################
+        # переписываем в loader:
+        loader.add_value('product_url', response.url)
         #
+
         # наименование товара:
         # //h1[contains(@class,"product-essential__name")]/text()
-        title_prod = response.xpath('//h1[contains(@class,"product-essential__name")]/text()').get()
+        # title_prod = response.xpath('//h1[contains(@class,"product-essential__name")]/text()').get()
         # print(title_prod)
+        # ################################################################
+        # переписываем в loader:
+        # loader.add_xpath('field_name', 'my_xpath')
+        loader.add_xpath('title_prod', '//h1[contains(@class,"product-essential__name")]/text()')
         #
+
         # старая цена:
         # //div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()
-        old_price = response.xpath('//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()').get()
+        # old_price = response.xpath('//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()').get()
         # print(old_price)
+        # ################################################################
+        # переписываем в loader:
+        loader.add_xpath('old_price', '//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()')
         # валюта (старая цена):
         # //div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[contains(@class, 'currency')]
         # //div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()
-        old_price_currency = response.xpath('//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()').get()
+        # old_price_currency = response.xpath('//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()').get()
         # print(old_price_currency)
+        # ################################################################
+        # переписываем в loader:
+        # loader.add_xpath('field_name', 'my_xpath')
+        loader.add_xpath('old_price_currency', '//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()')
         #
+
         # цена:
         # regular-price regular_price
         # //div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()
         # //div[contains(@class,"product-essential")]//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()
-        regular_price = response.xpath('//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()').get()
+        # regular_price = response.xpath('//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()').get()
         # print(regular_price)
+        # ################################################################
+        # переписываем в loader:
+        loader.add_xpath('regular_price', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()')
         # валюта цены:
         # //div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()
-        regular_price_currency = response.xpath('//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()').get()
+        # regular_price_currency = response.xpath('//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()').get()
         # print(regular_price_currency)
+        # ################################################################
+        # переписываем в loader:
+        loader.add_xpath('regular_price_currency', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()')
         #
         # единица измерения
         # measure
         # //div[@class="price-box"]/span[@class="measure"]/text()
-        measure = response.xpath('//div[@class="price-box"]/span[@class="measure"]/text()').get()
+        # measure = response.xpath('//div[@class="price-box"]/span[@class="measure"]/text()').get()
         # print(measure)
-        # xxxxx = response.xpath('yyyyyyyyyyy').get()
+        # ################################################################
+        # переписываем в loader:
+        loader.add_xpath('measure', '//div[@class="price-box"]/span[@class="measure"]/text()')
         #
+
         # все характеристики:
         # !!! получаем список характеристик:
-        spec_list = response.xpath('//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()').getall()
-        # !!! Очищаем каждый элемент списка от пробелов:
-        spec_list_striped = [x.strip() for x in spec_list]
-        spec_list_keys = []
-        spec_list_values = []
-        # !!! нечетные записываем в ключи, четные - в значения:
-        for i in range(len(spec_list_striped)):
-            if i % 2 == 0:
-                spec_list_keys.append(spec_list_striped[i])
-            else:
-                spec_list_values.append(spec_list_striped[i])
-        # spec_list_keys
-        # !!! создаем словарь из списков ключей и значений:
-        spec_dict = dict(zip(spec_list_keys, spec_list_values))
+        # spec_list = response.xpath('//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()').getall()
+
+        # # ************************** TODO ----- очистку переписать в items.py или в  pipelines.py
+        # # !!! Очищаем каждый элемент списка от пробелов:
+        # spec_list_striped = [x.strip() for x in spec_list]
+        # spec_list_keys = []
+        # spec_list_values = []
+        # # !!! нечетные записываем в ключи, четные - в значения:
+        # for i in range(len(spec_list_striped)):
+        #     if i % 2 == 0:
+        #         spec_list_keys.append(spec_list_striped[i])
+        #     else:
+        #         spec_list_values.append(spec_list_striped[i])
+        # # spec_list_keys
+        # # !!! создаем словарь из списков ключей и значений:
+        # spec_dict = dict(zip(spec_list_keys, spec_list_values))
+        # # ************************** TODO ----- очистку переписать в items.py или в  pipelines.py
+
         # print(spec_dict)
         # print(xxxxxxxxxxxxxxxxxxxxxxxxxxxxx)
+        # ################################################################
+        # переписываем в loader:
+        # loader.add_xpath('field_name', 'my_xpath') ------------------------------- TODO
+        loader.add_xpath('spec_list', '//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()')
         #
+
         # images
         # если картинка одна, то маленькой картинки нет - только большая
         # //ul[@class="swiper-wrapper"]/li[contains(@class,"thumb-slide")]/img[contains(@class,"thumb-slide__img")] -----
@@ -152,17 +196,22 @@ class CastoramaruSpider(scrapy.Spider):
         # list_big_images = response.xpath('//img[contains(@class,"top-slide__img")]').getall()
         # list_big_images = response.xpath('//img[contains(@class,"top-slide__img")]/@src | //img[contains(@class,"top-slide__img")]/@data-src').getall()
         # print(list_big_images)
-        list_big_images = response.xpath('//img[contains(@class,"top-slide__img")]/@data-src').getall()
+        # list_big_images = response.xpath('//img[contains(@class,"top-slide__img")]/@data-src').getall()
         # print(list_big_images)
-        # print()
-        yield ProductsparserItem(_id=_id,
-                                 product_url=product_url,
-                                 title_prod=title_prod,
-                                 old_price=old_price,
-                                 old_price_currency=old_price_currency,
-                                 price=regular_price,
-                                 price_currency=regular_price_currency,
-                                 measure=measure,
-                                 spec_dict=spec_dict,
-                                 # list_images=list_images,  # --- убрать маленькие фотки "list_images"
-                                 list_big_images=list_big_images)
+        # ################################################################
+        # переписываем в loader:
+        loader.add_xpath('list_big_images', '//img[contains(@class,"top-slide__img")]/@data-src')
+
+        # # print()
+        # yield ProductsparserItem(_id=_id,
+        #                          product_url=product_url,
+        #                          title_prod=title_prod,
+        #                          old_price=old_price,
+        #                          old_price_currency=old_price_currency,
+        #                          price=regular_price,
+        #                          price_currency=regular_price_currency,
+        #                          measure=measure,
+        #                          spec_dict=spec_dict,
+        #                          # list_images=list_images,  # --- убрать маленькие фотки "list_images"
+        #                          list_big_images=list_big_images)
+        yield loader.load_item()
