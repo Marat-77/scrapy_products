@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'productsparser.spiders'
 # включаем ведение логов:
 LOG_ENABLED = True
 # уровень логирования:
-# 'INFO' / 'DEBUG'
+# 'INFO' / 'DEBUG' / 'WARNING' / 'ERROR' / 'CRITICAL'
 LOG_LEVEL = 'DEBUG'
 
 # указываем директорию для сохранения картинок:

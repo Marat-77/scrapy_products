@@ -125,14 +125,14 @@ class CastoramaruSpider(scrapy.Spider):
         # print(regular_price)
         # ################################################################
         # переписываем в loader:
-        loader.add_xpath('regular_price', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()')
+        loader.add_xpath('price', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()')
         # валюта цены:
         # //div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()
         # regular_price_currency = response.xpath('//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()').get()
         # print(regular_price_currency)
         # ################################################################
         # переписываем в loader:
-        loader.add_xpath('regular_price_currency', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()')
+        loader.add_xpath('price_currency', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()')
         #
         # единица измерения
         # measure
@@ -148,7 +148,7 @@ class CastoramaruSpider(scrapy.Spider):
         # !!! получаем список характеристик:
         # spec_list = response.xpath('//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()').getall()
 
-        # # ************************** TODO ----- очистку переписать в items.py или в  pipelines.py
+        # # ************************** +++ ----- очистку переписать в items.py или в  pipelines.py
         # # !!! Очищаем каждый элемент списка от пробелов:
         # spec_list_striped = [x.strip() for x in spec_list]
         # spec_list_keys = []
@@ -162,14 +162,22 @@ class CastoramaruSpider(scrapy.Spider):
         # # spec_list_keys
         # # !!! создаем словарь из списков ключей и значений:
         # spec_dict = dict(zip(spec_list_keys, spec_list_values))
-        # # ************************** TODO ----- очистку переписать в items.py или в  pipelines.py
+        # # ************************** +++ ----- очистку переписать в items.py или в  pipelines.py
 
         # print(spec_dict)
         # print(xxxxxxxxxxxxxxxxxxxxxxxxxxxxx)
         # ################################################################
         # переписываем в loader:
-        # loader.add_xpath('field_name', 'my_xpath') ------------------------------- TODO
-        loader.add_xpath('spec_list', '//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()')
+        # loader.add_xpath('field_name', 'my_xpath') ------------------------------- +++
+        # print(response.xpath('//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()').getall())
+        # print()
+        # loader.add_xpath('spec_list', '//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()')
+        # spec_dict
+        # loader.add_xpath('spec_dict',
+        #                  '//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()')
+        loader.add_xpath('specification',
+                         '//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()')
+        # print()
         #
 
         # images
