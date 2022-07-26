@@ -11,7 +11,9 @@ class CastoramaruSpider(scrapy.Spider):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # стартовый URL:
-        self.start_urls = [f'https://www.castorama.ru/flooring/{kwargs.get("search")}?limit=96']
+        self.start_urls = [
+            f'https://www.castorama.ru/flooring/{kwargs.get("search")}?limit=96'
+        ]
 
     def parse(self, response: HtmlResponse):
         # находим кнопку "След.":
@@ -45,26 +47,42 @@ class CastoramaruSpider(scrapy.Spider):
         loader.add_value('product_url', response.url)
         # ################################################################
         # наименование товара:
-        loader.add_xpath('title_prod', '//h1[contains(@class,"product-essential__name")]/text()')
+        loader.add_xpath('title_prod',
+                         '//h1[contains(@class,"product-essential__name")]/text()')
         # ################################################################
         # старая цена (без скидки):
-        loader.add_xpath('old_price', '//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()')
+        loader.add_xpath('old_price',
+                         '//div[@class="price-box"]/span[@class="old-price"]'
+                         '/span[@class="price"]/span'
+                         '/span[not(contains(@class, "currency"))]/text()')
         # ################################################################
         # валюта (старая цена):
-        loader.add_xpath('old_price_currency', '//div[@class="price-box"]/span[@class="old-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()')
+        loader.add_xpath('old_price_currency',
+                         '//div[@class="price-box"]/span[@class="old-price"]'
+                         '/span[@class="price"]/span'
+                         '/span[contains(@class, "currency")]/text()')
         # ################################################################
         # цена:
-        loader.add_xpath('price', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[not(contains(@class, "currency"))]/text()')
+        loader.add_xpath('price',
+                         '//div[@class="price-box"]/span[@class="regular-price"]'
+                         '/span[@class="price"]/span'
+                         '/span[not(contains(@class, "currency"))]/text()')
         # ################################################################
         # валюта цены:
-        loader.add_xpath('price_currency', '//div[@class="price-box"]/span[@class="regular-price"]/span[@class="price"]/span/span[contains(@class, "currency")]/text()')
+        loader.add_xpath('price_currency',
+                         '//div[@class="price-box"]/span[@class="regular-price"]'
+                         '/span[@class="price"]/span'
+                         '/span[contains(@class, "currency")]/text()')
         # ################################################################
         # единица измерения количества товара:
-        loader.add_xpath('measure', '//div[@class="price-box"]/span[@class="measure"]/text()')
+        loader.add_xpath('measure',
+                         '//div[@class="price-box"]/span[@class="measure"]/text()')
         # ################################################################
         # получаем список характеристик:
         loader.add_xpath('specification',
-                         '//span[contains(@class,"specs-table__attribute-name")]/text() | //dd[contains(@class,"specs-table__attribute-value")]/text()')
+                         '//span[contains(@class,"specs-table__attribute-name")]/text() '
+                         '| //dd[contains(@class,"specs-table__attribute-value")]/text()'
+                         )
         # ################################################################
         # изображения товара:
         loader.add_xpath('list_big_images', '//img[contains(@class,"top-slide__img")]/@data-src')

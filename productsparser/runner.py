@@ -12,7 +12,7 @@ if __name__ == '__main__':
     runner = CrawlerRunner(settings)
 
     # запуск паука castorama.ru
-    # search='что ищем'
+    # search_keyword='что ищем'
     search_keyword = 'laminate'
     runner.crawl(CastoramaruSpider, search=search_keyword)
 
