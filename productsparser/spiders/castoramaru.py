@@ -1,5 +1,6 @@
 import scrapy
 from scrapy.http import HtmlResponse
+from productsparser.items import ProductsparserItem
 # from jobparser.items import JobparserItem
 from productsparser.items import ProductsparserItem
 
@@ -150,3 +151,14 @@ class CastoramaruSpider(scrapy.Spider):
         list_big_images = response.xpath('//img[contains(@class,"top-slide__img")]/@data-src').getall()
         # print(list_big_images)
         # print()
+        yield ProductsparserItem(_id=_id,
+                                 product_url=product_url,
+                                 title_prod=title_prod,
+                                 old_price=old_price,
+                                 old_price_currency=old_price_currency,
+                                 price=regular_price,
+                                 price_currency=regular_price_currency,
+                                 measure=measure,
+                                 spec_dict=spec_dict,
+                                 list_images=list_images,
+                                 list_big_images=list_big_images)
