@@ -30,3 +30,6 @@ class ProductsImagesPipeline(ImagesPipeline):
                 except Exception as e:
                     print(e)
     # добавить def item_completed !!!
+    def item_completed(self, results, item, info):
+        item['list_big_images'] = [itm[1] for itm in results if itm[0]]
+        return item
