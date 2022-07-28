@@ -36,3 +36,4 @@ class ProductsparserItem(scrapy.Item):
     measure = scrapy.Field(output_processor=TakeFirst())
     specification = scrapy.Field(input_processor=MapCompose(process_spec_list))
     list_big_images = scrapy.Field()
+    last_change = scrapy.Field()

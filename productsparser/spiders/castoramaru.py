@@ -24,16 +24,10 @@ class CastoramaruSpider(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
         # ссылка на страницу товара:
         links = response.xpath('//a[contains(@class, "product-card__name")]')
+
         # перебираем все ссылки из списка links:
         for link in links:
             yield response.follow(link, callback=self.product_parse)
-            # # ------------------------------------------------------------------------------!!!
-            # # проверяем отсутствие выбранной ссылки в БД:
-            # if not mongo_settings.vacancies.find_one(
-            #         {'_id': 'hh_' + link.split('?')[0].split('vacancy/')[-1]}):
-            #     # запускаем vacancy_parse:
-            #     yield response.follow(link, callback=self.vacancy_parse)
-            # # ------------------------------------------------------------------------------!!!
 
     def product_parse(self, response: HtmlResponse):
         # добавляем loader:
@@ -86,4 +80,5 @@ class CastoramaruSpider(scrapy.Spider):
         # ################################################################
         # изображения товара:
         loader.add_xpath('list_big_images', '//img[contains(@class,"top-slide__img")]/@data-src')
+
         yield loader.load_item()
